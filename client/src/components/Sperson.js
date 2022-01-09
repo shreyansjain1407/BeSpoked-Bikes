@@ -8,7 +8,7 @@ const Sperson = ({sp, update}) => {
     const [address, setAddress] = useState(sp.address)
     const [phone, setPhone] = useState(sp.phone)
     const [start_date, setStart_date] = useState(sp.start_date.split('T')[0])
-    const [termination_date, setTermination_date] = useState("")
+    const [termination_date, setTermination_date] = useState(sp.termination_date? sp.termination_date.split('T')[0]: "")
     const [manager, setManager] = useState(sp.manager)
 
     const sendDetails = (e) => {
@@ -96,7 +96,7 @@ const Sperson = ({sp, update}) => {
                     form={id}
                     type="text"
                     value={start_date}
-                    className="px-2 py-1 w-28 border-2"
+                    className="px-2 py-1 w-32 border-2"
                     onChange={
                         (e) => setStart_date((e.target.value))
                     } 
@@ -107,7 +107,7 @@ const Sperson = ({sp, update}) => {
                     disabled={!editable}
                     form={id}
                     type="text"
-                    value={termination_date?termination_date:"NA"}
+                    value={termination_date?termination_date:''}
                     className="px-2 py-1 w-28 border-2"
                     onChange={
                         (e) => setTermination_date((e.target.value))

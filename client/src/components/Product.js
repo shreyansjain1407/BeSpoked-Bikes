@@ -11,10 +11,6 @@ const Product = ({ prod, update }) => {
     const [commission, setCommission] = useState(prod.commission)
     const sendDetails = (e) => {
         e.preventDefault()
-        console.log("Send Details clicked from Products");
-        // if(!product_id) {
-        //     alert("Please enter First Name")
-        // }
         if(!name) {
             alert("Please enter Product Name")
         }
