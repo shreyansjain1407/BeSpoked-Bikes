@@ -1,6 +1,6 @@
 import MenuButton from "./MenuButton";
 
-const Menu = ({sp, prod, cust, sale, newSale}) => {
+const Menu = ({sp, prod, cust, sale, newSale, reoprt}) => {
     return (
         <div className="flex flex-wrap flex-row">
             <MenuButton value="Display and Update SalesPerson" onClick={sp} />
@@ -8,7 +8,7 @@ const Menu = ({sp, prod, cust, sale, newSale}) => {
             <MenuButton value="Display Customer Details" onClick={cust} />
             <MenuButton value="Display Product Sales" onClick={sale}/>
             <MenuButton value="Create New Sale" onClick={newSale} />
-            <MenuButton value="Quarterly Reports" />
+            <MenuButton value="Quarterly Reports" onClick={report}/>
         </div>
     )
 };

@@ -13,7 +13,6 @@ const Sperson = ({sp, update}) => {
 
     const sendDetails = (e) => {
         e.preventDefault()
-        console.log("Send Details clicked from Sperson");
         if(!f_name) {
             alert("Please enter First Name")
         }

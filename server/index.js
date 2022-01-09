@@ -111,10 +111,10 @@ app.post('/updProduct', (req, res) => {
 });
 
 app.post('/addSale', (req, res) => {
-    const custID = req.body.saleData.custID;
-    const spID = req.body.saleData.spID;
-    const prodID = req.body.saleData.prodID;
-    var date = req.body.saleData.date;
+    const custID = req.body.custID;
+    const spID = req.body.spID;
+    const prodID = req.body.prodID;
+    var date = req.body.date;
     if(date == ''){
         db.query("INSERT INTO sales(product_id, sp_id, cust_id) VALUES (?,?,?)", [prodID, spID, custID], 
         (err, result) => {
@@ -173,6 +173,69 @@ app.post('/fetchDup', (req, res) => {
     });
 });
 
+app.post('/fetchduplicateCust', (req, res) => {
+    // console.log(req);
+    const fName = req.body.fName;
+    const custPhone = req.body.custPhone;
+    console.log(fName, custPhone)
+    db.query("SELECT * FROM customer WHERE f_name=(?) and phone=(?)",
+    [fName, custPhone], 
+    (err, result) => {
+        if(err){
+            console.log(err);
+        }else{
+            res.send(result);
+        }
+    });
+});
+
+app.post('/createCustomer', (req, res) => {
+    const cust_id = req.body.cust_id;
+    const fName = req.body.saleData.fName;
+    const lName = req.body.saleData.lName;
+    const add = req.body.saleData.add;
+    const custPhone = req.body.saleData.custPhone;
+    console.log(fName, lName, add, custPhone);
+    db.query("INSERT INTO `profisee`.`customer` (`cust_id`, `f_name`, `l_name`, `address`, `phone`) VALUES (?,?,?,?,?)", 
+    [cust_id, fName, lName, add, custPhone],
+    (err, result) => {
+        if(err){
+            console.log(err);
+            res.send("Duplicate Entry");
+        }else{
+            res.send("Insert Successful");
+        }
+    });
+});
+
+app.post('/fetchSPID', (req, res) => {
+    const salesPhone = req.body.phone;
+    db.query("SELECT * FROM salesperson where phone=(?)", 
+    [salesPhone],
+    (err, result) => {
+        if(err){
+            console.log(err);
+        }else{
+            res.send(result);
+        }
+    });
+});
+
+app.post('/fetchSP', (req,res) => {
+    const f_name = req.body.f_name;
+    const phone = req.body.phone;
+
+    db.query("SELECT * FROM salesperson where f_name=(?) and phone=(?)", 
+    [f_name, phone],
+    (err, result) => {
+        if(err){
+            console.log(err)
+        }else{
+            res.send(result);
+        }
+    });
+});
+
 app.listen(3001, () => {
     console.log("The server is fully operational on 3001")
 })
@@ -200,18 +263,3 @@ app.listen(3001, () => {
 //     });
 // });
 
-// app.post('/createCustomer', (req, res) => {
-//     const fName = req.body.saleData.fName;
-//     const lName = req.body.saleData.lName;
-//     const add = req.body.saleData.add;
-//     const custPhone = req.body.saleData.custPhone;
-//     db.query("INSERT INTO `profisee`.`customer` (`f_name`, `l_name`, `address`, `phone`) VALUES (?,?,?,?)", 
-//     [fName, lName, add, custPhone],
-//     (err, result) => {
-//         if(err){
-//             console.log(err);
-//         }else{
-//             res.send("Insert Successful");
-//         }
-//     });
-// });
