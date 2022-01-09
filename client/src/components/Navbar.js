@@ -1,6 +1,6 @@
 import { FaFire, FaBars } from 'react-icons/fa'
 const Navbar = ({ onClick }) => {
-
+    //The topmost bar that houses the company name and space for future implementation of any other pages that might need links
     return (
         <div className="flex top w-screen bg-slate-900">
             <button className="text-white text-3xl m-4">Bespoked Bikes</button>

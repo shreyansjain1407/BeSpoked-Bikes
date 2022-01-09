@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+//Tha single product element displayed in the products section, takes single JSON object as prop and also houses the form that is needed to update the products
 const Product = ({ prod, update }) => {
     const [editable, setEditable] = useState(false)
     const [product_id] = useState(prod.product_id)

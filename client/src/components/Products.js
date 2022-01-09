@@ -1,6 +1,7 @@
 import Product from "./Product"
 import Heading from "./Heading"
 
+//The main products section that passes JSON to singular product element which houses more functionality, gets the master data from App.js as prop as well as the function to update products which is passed to the singular elements
 const Products = ({data, update}) => {
     return (
         <>

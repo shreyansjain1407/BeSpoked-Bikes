@@ -2,6 +2,7 @@ import Sperson from "./Sperson"
 import Heading from "./Heading"
 import { useState } from "react"
 
+//The element that contains the sales person table and the functionality to add new sales reps, also passes update function and the values down to singular sperson elements
 const Salesperson = ({data, update, addSP}) => {
     const [editable, setEditable] = useState(false)
     const [f_name, setF_name] = useState("")

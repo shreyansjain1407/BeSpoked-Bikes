@@ -2,6 +2,7 @@ import Heading from "./Heading";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+//Form element to input sale into the database
 const CreateSale = ({addSale}) => {
     const [fName, setFName] = useState("")
     const [lName, setLName] = useState("")
@@ -14,6 +15,7 @@ const CreateSale = ({addSale}) => {
 
     const confirmSale = (e) => {
         e.preventDefault()
+        //Checks for empty inputs
         if(!fName) {
             alert('Please enter first name')
             return
@@ -95,27 +97,3 @@ const CreateSale = ({addSale}) => {
 };
 
 export default CreateSale
-
-
-
-// Additional Functionality
-
-/* <div className="my-4">
-    <label className="mx-4">Returning Customer ?</label>
-    <input type="checkbox" className="p-4 border-2 border-teal-900 mx-auto" onChange={fetchDetails}/>
-</div> */
-    // const [existCust, setExistCust] = useState(false);
-    // const [customer, setCustomer] = useState(cust);
-    // const [salesperson, setSalesPerson] = useState(sp);
-    // const [products, setProducts] = useState(prod);
-    // const [curCust, setCurCust] = useState("")
-
-
-    // const fetchDetails = async (e) => {
-    //     setExistCust(e.currentTarget.checked);
-    //     // await fetch()
-    //     setCustomer(cust)
-    //     setSalesPerson(sp)
-    //     setProducts(prod)
-    //     console.log(customer);
-    // }

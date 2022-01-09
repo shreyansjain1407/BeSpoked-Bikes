@@ -1,5 +1,6 @@
 import {useState} from 'react'
 
+//Singular element of the sales person element table which passes the update function here along with the details of all sales reps
 const Sperson = ({sp, update}) => {
     const [editable, setEditable] = useState(false)
     const [id] = useState(sp.sp_id)

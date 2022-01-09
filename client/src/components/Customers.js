@@ -1,5 +1,6 @@
 import Heading from "./Heading"
 
+//Section to display the list of customers, props included are the list of customers frmo App.js
 const Customers = ({data}) => {
     return (
         <>
@@ -21,14 +22,12 @@ const Customers = ({data}) => {
             <tbody>
                 {data.map((cust, index) => (
                     <tr key={index} className="border-2">
-                    <td className="px-4 py-1 border-2">{cust.cust_id}</td>
-                    <td className="px-4 py-1 border-2">{cust.f_name}</td>
-                    <td className="px-4 py-1 border-2">{cust.l_name}</td>
-                    <td className="px-4 py-1 border-2">{cust.address}</td>
-                    <td className="px-4 py-1 border-2">{cust.phone}</td>
-                    <td className="px-4 py-1 border-2">{cust.start_date.split('T')[0]}</td>
-                    {/* <td className="px-4 py-1 border-2"><button className="bg-gray-200 px-4 py-1">Edit</button></td> */}
-                    
+                        <td className="px-4 py-1 border-2">{cust.cust_id}</td>
+                        <td className="px-4 py-1 border-2">{cust.f_name}</td>
+                        <td className="px-4 py-1 border-2">{cust.l_name}</td>
+                        <td className="px-4 py-1 border-2">{cust.address}</td>
+                        <td className="px-4 py-1 border-2">{cust.phone}</td>
+                        <td className="px-4 py-1 border-2">{cust.start_date.split('T')[0]}</td>
                     </tr>
                 ))}
             </tbody>

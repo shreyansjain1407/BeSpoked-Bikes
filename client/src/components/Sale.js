@@ -1,3 +1,5 @@
+//The singular Sale element that houses the row of the sales table that passes JSON data here
+
 const Sale = ({sale, index}) => {
     return (
         <tr className="border-2">

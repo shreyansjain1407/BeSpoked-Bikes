@@ -21,14 +21,13 @@ app.get('/dispSalesPerson', (req, res) => {
             if(err){
                 console.log(err);
             }else{
-                // console.log("Salesperson display");
-                // console.log(result);
                 res.send(result);
             }
         }
     )
 });
 
+//Endpoint to get the list of all Products in the database
 app.get('/dispProducts', (req, res) => {
     db.query(
         "SELECT * FROM products",
@@ -36,13 +35,13 @@ app.get('/dispProducts', (req, res) => {
             if(err){
                 console.log(err);
             }else{
-                // console.log(result);
                 res.send(result);
             }
         }
     )
 });
 
+//Endpoint to get the list of all Customers in the database
 app.get('/dispCust', (req, res) => {
     db.query(
         "SELECT * FROM customer",
@@ -50,27 +49,27 @@ app.get('/dispCust', (req, res) => {
             if(err){
                 console.log(err);
             }else{
-                // console.log(result);
                 res.send(result);
             }
         }
     )
 });
 
+//Endpoint to get the list of all Sales in the database
 app.get('/dispSales', (req, res) => {
     db.query(
-        "SELECT * FROM sales_record",
+        "SELECT * FROM sale_disc_records",
         (err, result) => {
             if(err){
                 console.log(err);
             }else{
-                // console.log(result);
                 res.send(result);
             }
         }
     )
 });
 
+//Endpoint to update the details of a sales person after verification has been completed in the front end
 app.post('/updSalesPerson', (req, res) => {
     // console.log(req);
     const id = req.body.sp.id;
@@ -91,6 +90,7 @@ app.post('/updSalesPerson', (req, res) => {
     })
 });
 
+//Endpoint to update the details of a product after verification has been completed in the front end
 app.post('/updProduct', (req, res) => {
 
     const product_id = req.body.prod.product_id;
@@ -110,6 +110,7 @@ app.post('/updProduct', (req, res) => {
     });
 });
 
+// Endpoint to add a sale to the database
 app.post('/addSale', (req, res) => {
     const custID = req.body.custID;
     const spID = req.body.spID;
@@ -136,6 +137,7 @@ app.post('/addSale', (req, res) => {
     }
 });
 
+// Endpoint to add a new sales person to the database
 app.post('/addSP', (req, res) => {
     const f_name = req.body.sperson.f_name;
     const l_name = req.body.sperson.l_name;
@@ -158,6 +160,24 @@ app.post('/addSP', (req, res) => {
     });
 });
 
+// Endpoint to get the commission report of the sales reps
+app.post('/getReport', (req,res) => {
+    const start = req.body.start;
+    const end = req.body.end;
+
+    db.query("SELECT REP.Salesperson, SUM(Commission) as Commission FROM (SELECT Z.name as product_name, Z.disc_price as sale_price, Z.c_name as Customer_Name, Z.sale_date, concat(SP.f_name, ' ' , SP.l_name) as Salesperson, (Z.disc_price*Z.commission)/100 as Commission FROM (SELECT Y.name, Y.sale_price, Y.c_name, Y.sale_date, Y.sp_id, Y.commission, case when Y.sale_date between Y.begin_date and Y.end_date then (Y.sale_price*Y.discount/100) else Y.sale_price end as disc_price FROM (SELECT X.name, X.commission, X.sale_price , X.sp_id, concat(X.f_name, ' ', X.l_name) as c_name, X.sale_date, X.product_id, D.begin_date, D.end_date, D.discount FROM (SELECT S.name, S.sale_price, S.commission, S.sp_id, C.f_name, C.l_name , S.sale_date ,S.product_id FROM customer C, (SELECT name, sale_price, commission, sp_id, sale_date, cust_id, product_id FROM products Natural Join sales) S WHERE S.cust_id = C.cust_id ) X  LEFT OUTER JOIN discount D ON X.product_id = D.product_id) Y) Z, salesperson SP WHERE SP.sp_ID = Z.sp_id) REP WHERE REP.sale_date BETWEEN (?) AND (?) GROUP BY REP.Salesperson",
+    [start, end], 
+    (err, result) => {
+        if(err){
+            console.log(err)
+        }else{
+            res.send(result);
+        }
+    });
+});
+
+//=============VALIDATION ENDPOINTS======================
+//Endpoint to fetch duplicate products used for validation of data
 app.post('/fetchDup', (req, res) => {
     const name = req.body.name;
     const manufacturer = req.body.manufacturer;
@@ -173,11 +193,10 @@ app.post('/fetchDup', (req, res) => {
     });
 });
 
+//Endpoint to fetch duplicate customers used for validation of data
 app.post('/fetchduplicateCust', (req, res) => {
-    // console.log(req);
     const fName = req.body.fName;
     const custPhone = req.body.custPhone;
-    console.log(fName, custPhone)
     db.query("SELECT * FROM customer WHERE f_name=(?) and phone=(?)",
     [fName, custPhone], 
     (err, result) => {
@@ -189,6 +208,7 @@ app.post('/fetchduplicateCust', (req, res) => {
     });
 });
 
+//Endpoint to create a new customer
 app.post('/createCustomer', (req, res) => {
     const cust_id = req.body.cust_id;
     const fName = req.body.saleData.fName;
@@ -208,6 +228,7 @@ app.post('/createCustomer', (req, res) => {
     });
 });
 
+// Endpoint to get the details of a sales person based on the phone provided
 app.post('/fetchSPID', (req, res) => {
     const salesPhone = req.body.phone;
     db.query("SELECT * FROM salesperson where phone=(?)", 
@@ -221,6 +242,7 @@ app.post('/fetchSPID', (req, res) => {
     });
 });
 
+// Endpoint to fetch the details of a sales person based on phone as well as first name
 app.post('/fetchSP', (req,res) => {
     const f_name = req.body.f_name;
     const phone = req.body.phone;
@@ -241,25 +263,4 @@ app.listen(3001, () => {
 })
 
 
-//Future Implementation
-// app.post('/fetchCustID', (req, res) => {
-//     const fName = req.body.saleData.fName;
-//     const lName = req.body.saleData.lName;
-//     const add = req.body.saleData.add;
-//     const custPhone = req.body.saleData.custPhone;
-//     const prod = req.body.saleData.prod;
-//     const salesPhone = req.body.saleData.salesPhone;
-//     const date = req.body.saleData.date;
-//     // console.log(fName, lName, add, custPhone, prod, salesPhone, date);
-//     var cust_id = "";
-
-//     db.query("SELECT cust_id from customer WHERE phone=(?) AND f_name=(?)", [custPhone, fName], 
-//     (err, result) => {
-//         if(err) {
-//             console.log(err)
-//         }else{
-//             res.send(result);
-//         }
-//     });
-// });
 

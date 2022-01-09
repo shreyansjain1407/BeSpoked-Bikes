@@ -13,7 +13,7 @@ import CreateSale from './components/CreateSale';
 import QtrReport from './components/QtrReport';
 
 function App() {
-  const [dispSP, setDispSP] = useState(false);
+  const [dispSP, setDispSP] = useState(false);          //useStates for selecting which of the objects are visible
   const [dispProd, setDispProd] = useState(false);
   const [dispCust, setDispCust] = useState(false);
   const [dispSales, setDispSales] = useState(false);
@@ -25,14 +25,14 @@ function App() {
   const [products, setProducts] = useState([]);         // Display & Update Products
   const [customers, setCustomers] = useState([]);       // Display Customers
   const [saleRecords, setSaleRecords] = useState([]);   // Display Sales
-  // Display Sales
-  // Create Sale
-  // Quarterly Report
-  
+  const [report, setReport] = useState([]);             // Display Reports
+
+
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
+  //Function to get the list of sales person from the database
   const getSalesPerson = () => {
     Axios.get('http://localhost:3001/dispSalesPerson').then((response) => {
       setSalesPerson(response.data);
@@ -45,6 +45,7 @@ function App() {
     setDispReports(false);
   };
 
+  //Function to update salesperson details checks for duplicates by checking phoen and first name
   const updateSP = async (salesPerson) => {
     const duplicateSP = await Axios.post('http://localhost:3001/fetchSP',{
       f_name: salesPerson.f_name,
@@ -65,6 +66,7 @@ function App() {
     })
   };
 
+  //Function to get the list of products from the database
   const getProducts = () => {
     Axios.get('http://localhost:3001/dispProducts').then((response) => {
       setProducts(response.data);
@@ -77,6 +79,7 @@ function App() {
     setDispReports(false);
   };
 
+  //Function to update products, checks for existence of duplicates, then updates the values
   const updateProd = async (updProduct) => {
     const name = updProduct.name;
     const manufacturer = updProduct.manufacturer;
@@ -101,6 +104,7 @@ function App() {
     })
   };
 
+  //Function to get the list of customers
   const getCustomers = () => {
     Axios.get('http://localhost:3001/dispCust').then((response) => {
       setCustomers(response.data);
@@ -113,6 +117,7 @@ function App() {
     setDispReports(false);
   };
 
+  //Function to get sale records sorted in ascending order by default makes use of a view behind the scenes
   const getSaleRecords = () => {
     Axios.get('http://localhost:3001/dispSales').then((response) => {
       // console.log(response.data);
@@ -126,6 +131,7 @@ function App() {
     setDispReports(false);
   };
 
+  //Function to set display of the add sales page to true and disable all others
   const addNewSale = () => {
     setDispSP(false);
     setDispProd(false);
@@ -135,6 +141,7 @@ function App() {
     setDispReports(false);
   };
 
+  //Function to create new sale checks for duplicate and gives alerts depending on the error
   const addSaleRecord = async (sale) => {
     console.log(sale)
     const fName = sale.fName;
@@ -207,6 +214,7 @@ function App() {
     });
   };
 
+  //Function to add a new sales person and also checks for duplicates dependent on fname and phone
   const addSalesperson = (sperson) => {
     const duplicateSP = Axios.post('http://localhost:3001/fetchSP',{
       f_name: sperson.f_name,
@@ -227,71 +235,61 @@ function App() {
     console.log("LINE 137");
   };
 
-  const getReports = () => {
+  //Function to set display of reports section to true while disabling all other sections
+  const showReports = () => {
     setDispSP(false);
     setDispProd(false);
     setDispCust(false);
     setDispSales(false);
     setDispCreate(false);
     setDispReports(true);
-  }
+  };
+
+  //Function to display commission reports of sales person quarterly with a choice of quarter and year
+  const getReports = (dateData) => {
+    // console.log(dateData);
+    const quarter = dateData.quarter;
+    var startDate = "";
+    var endDate = "";
+    if(quarter == 1){
+      startDate = "01-01";
+      endDate = "03-31"
+    }else if(quarter == 2){
+      startDate = "04-01";
+      endDate = "06-30"
+    }else if(quarter == 3){
+      startDate = "07-01";
+      endDate = "09-30"
+    }else{
+      startDate = "10-01";
+      endDate = "12-31"
+    }
+    const year = dateData.year;
+    const start = (year+"-"+startDate);
+    const end = (year+"-"+endDate);
+    console.log(start, " ", end);
+    Axios.post('http://localhost:3001/getReport',{
+      start: start,
+      end: end,
+    }).then((response) => {
+      // console.log(response);
+      setReport(response.data);
+    });
+  };
 
   return (
     <div className="flex flex-col">
       <div><Navbar onClick={toggleMenu} /></div>
-      {showMenu && <Menu sp={getSalesPerson} prod={getProducts} cust={getCustomers} sale={getSaleRecords} newSale={addNewSale} report={getReports} /> }
+      {showMenu && <Menu sp={getSalesPerson} prod={getProducts} cust={getCustomers} sale={getSaleRecords} newSale={addNewSale} report={showReports} /> }
       {!showMenu && <Heading value="Welcome to Bespoked Bikes" /> }
       {dispSP && <Salesperson data={salesPerson} update={updateSP} addSP={addSalesperson} />}
       {dispProd && <Products data={products} update={updateProd} />}
       {dispCust && <Customers data={customers} />}
       {dispSales && <Sales data={saleRecords} />}
       {dispCreate && <CreateSale addSale={addSaleRecord} />}
-      {dispReports && <QtrReport />}
+      {dispReports && <QtrReport getData={getReports} data={report} />}
     </div>
   );
 }
 
 export default App;
-
-//Auxilary Function
-  // const fetchDetailsForSale = () => {
-  //   console.log("Logging from fetchDetails")
-  //   Axios.get('http://localhost:3001/dispSalesPerson').then((response) => {
-  //     setSalesPerson(response.data);
-  //   });
-  //   Axios.get('http://localhost:3001/dispProducts').then((response) => {
-  //     setProducts(response.data);
-  //   });
-  //   Axios.get('http://localhost:3001/dispCust').then((response) => {
-  //     setCustomers(response.data);
-  //   });
-  // }
-
-//Future Implementation 
-// const addSaleRecord = async (sale) => {
-//   console.log(sale);
-//   const customer_id = await Axios.post('http://localhost:3001/fetchCustID',{
-//     saleData: sale,
-//   }).then((result) => {
-//     return result.data;
-//   });
-//   if(customer_id.length == 0){
-//     await Axios.post('http://localhost:3001/createCustomer',{
-//       saleData: sale,
-//     }).then((result) => {
-//       console.log(result);
-//     });
-//   }
-//   const final_custID = 
-//   console.log("LINE 128: ",customer_id);
-// }
-
-  //Function to add sale to the 
-  // const addSaleRecord = (sale) => {
-  //   console.log(sale);
-  //   Axios.post('http://localhost:3001/addSale',{
-  //     saleData: sale,
-  //   }).then((response) => {
-  //     console.log(response);
-  //   });
-  // };

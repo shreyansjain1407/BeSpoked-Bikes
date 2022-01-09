@@ -1,6 +1,7 @@
 import Heading from "./Heading"
 import Sale from "./Sale"
 
+//The main sales element that gets the data from App.js and then further passes it down to the singular element
 const Sales = ({data}) => {
     return (
         <>

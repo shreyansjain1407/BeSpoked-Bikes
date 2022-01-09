@@ -1,5 +1,6 @@
 import { FaFire, FaBars } from 'react-icons/fa'
 
+//Sidebar written to provide any additional functionality but never used 
 const Sidebar = () => {
     return (
         <div>
