@@ -1,8 +1,9 @@
-
+import Heading from "./Heading"
 
 const Customers = ({data}) => {
     return (
         <>
+            <Heading value="List of Customers"/>
             {data.length ?
             (<table className="table-auto border-2">
             <thead>
@@ -14,7 +15,7 @@ const Customers = ({data}) => {
                 <th className="px-4 py-4 border-2">Address</th>
                 <th className="px-4 py-4 border-2">Phone</th>
                 <th className="px-4 py-4 border-2">Start Date</th>
-                <th className="px-4 py-4 border-2">Update</th>
+                {/* <th className="px-4 py-4 border-2">Update</th> */}
                 </tr>
             </thead>
             <tbody>
@@ -26,13 +27,13 @@ const Customers = ({data}) => {
                     <td className="px-4 py-1 border-2">{cust.address}</td>
                     <td className="px-4 py-1 border-2">{cust.phone}</td>
                     <td className="px-4 py-1 border-2">{cust.start_date.split('T')[0]}</td>
-                    <td className="px-4 py-1 border-2"><button className="bg-gray-200 px-4 py-1">Edit</button></td>
+                    {/* <td className="px-4 py-1 border-2"><button className="bg-gray-200 px-4 py-1">Edit</button></td> */}
                     
                     </tr>
                 ))}
             </tbody>
             </table>):
-            (<h1>No Data to Display</h1>)
+            (<Heading value="No Data to Display"/>)
         }
         </>
     )

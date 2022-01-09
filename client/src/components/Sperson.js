@@ -2,7 +2,7 @@ import {useState} from 'react'
 
 const Sperson = ({sp, update}) => {
     const [editable, setEditable] = useState(false)
-    const [id, setID] = useState(sp.sp_id)
+    const [id] = useState(sp.sp_id)
     const [f_name, setF_name] = useState(sp.f_name)
     const [l_name, setL_name] = useState(sp.l_name)
     const [address, setAddress] = useState(sp.address)
@@ -13,7 +13,7 @@ const Sperson = ({sp, update}) => {
 
     const sendDetails = (e) => {
         e.preventDefault()
-        console.log("Send Details clicked");
+        console.log("Send Details clicked from Sperson");
         if(!f_name) {
             alert("Please enter First Name")
         }
@@ -29,9 +29,6 @@ const Sperson = ({sp, update}) => {
         if(!start_date) {
             alert("Please enter Start Date")
         }
-        // if(!termination_date ) {
-        //     alert("Please enter First Name")
-        // }
         if(!manager) {
             alert("Please enter Manager Name")
         }
@@ -42,11 +39,12 @@ const Sperson = ({sp, update}) => {
     return(
         <tr className="border-2">
             <td className="px-4 py-1 border-2"><form id={id} onSubmit={sendDetails}>
-                <input form={id} type="text" value={id} className="px-2 py-1 w-6" disabled/> 
+                <input form={id} type="text" value={id} className="px-2 py-1 w-6" disabled /> 
                 </form>
             </td>
             <td className="px-4 py-1 border-2">
                 <input 
+                    disabled={!editable}
                     form={id}
                     type="text" 
                     value={f_name} 
@@ -58,6 +56,7 @@ const Sperson = ({sp, update}) => {
             </td>
             <td className="px-4 py-1 border-2">
                 <input
+                    disabled={!editable}
                     form={id}
                     type="text"
                     value={l_name}
@@ -69,6 +68,7 @@ const Sperson = ({sp, update}) => {
             </td>
             <td className="px-4 py-1 border-2">
                 <input
+                    disabled={!editable}
                     form={id}
                     type="text"
                     value={address}
@@ -80,17 +80,19 @@ const Sperson = ({sp, update}) => {
             </td>
             <td className="px-4 py-1 border-2">
                 <input
+                    disabled={!editable}
                     form={id}
                     type="text"
                     value={phone}
                     className="px-2 py-1 w-32 border-2"
                     onChange={
                         (e) => setPhone((e.target.value))
-                    } 
+                    }
                 />
             </td>
             <td className="px-4 py-1 border-2">
                 <input
+                    disabled={!editable}
                     form={id}
                     type="text"
                     value={start_date}
@@ -102,6 +104,7 @@ const Sperson = ({sp, update}) => {
             </td>
             <td className="px-4 py-1 border-2">
                 <input
+                    disabled={!editable}
                     form={id}
                     type="text"
                     value={termination_date?termination_date:"NA"}
@@ -113,6 +116,7 @@ const Sperson = ({sp, update}) => {
             </td>
             <td className="px-4 py-1 border-2">
                 <input
+                    disabled={!editable}
                     form={id}
                     type="text"
                     value={manager}
@@ -123,10 +127,9 @@ const Sperson = ({sp, update}) => {
                 />
             </td>
             <td className="px-4 py-1 border-2">
-                <input type="submit" form={id} className="bg-gray-200 px-4 py-1 ml-2" value="Submit" />
-                {/* {!editable && <button className="bg-gray-200 px-4 py-1" onClick={() => {setEditable(!editable)}}>Edit</button>}
-                {editable && <button className="bg-gray-200 px-4 py-1" onClick={() => {setEditable(!editable)}}>Cancel</button>} */}
-                {/* {!editable && <button form={id} className="bg-gray-200 px-4 py-1 ml-2" onClick={sendDetails()}>Submit</button>} */}
+                {editable && <input type="submit" form={id} className="bg-gray-200 px-4 py-1 mr-2" value="Submit" />}
+                {!editable && <button className="bg-gray-200 px-4 py-1" onClick={() => {setEditable(!editable)}}>Edit</button>}
+                {editable && <button className="bg-gray-200 px-4 py-1" onClick={() => {setEditable(!editable)}}>Cancel</button>}
             </td>
         </tr>
     )

@@ -59,7 +59,7 @@ app.get('/dispCust', (req, res) => {
 
 app.get('/dispSales', (req, res) => {
     db.query(
-        "SELECT * FROM salesperson",
+        "SELECT * FROM sales_record",
         (err, result) => {
             if(err){
                 console.log(err);
@@ -92,8 +92,26 @@ app.post('/updSalesPerson', (req, res) => {
             res.send("Values Successfully Inserter");
         }
     })
-})
+});
 
+app.post('/updProduct', (req, res) => {
+
+    const product_id = req.body.prod.product_id;
+    const name = req.body.prod.name;
+    const manufacturer = req.body.prod.manufacturer;
+    const purchase_price = req.body.prod.purchase_price;
+    const sale_price = req.body.prod.sale_price;
+    const quantity = req.body.prod.quantity;
+    const commission = req.body.prod.commission;
+
+    db.query("UPDATE profisee.products SET name=(?), manufacturer=(?), purchase_price=(?), sale_price=(?),quantity=(?),commission=(?) WHERE product_id=(?)",[name, manufacturer, purchase_price, sale_price, quantity, commission, product_id], (err, result) => {
+        if(err) {
+            console.log(err);
+        }else{
+            res.send("Values Successfully Inserter into Products");
+        }
+    })
+})
 
 app.listen(3001, () => {
     console.log("The server is fully operational on 3001")

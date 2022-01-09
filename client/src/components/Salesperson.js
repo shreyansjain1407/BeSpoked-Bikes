@@ -1,8 +1,10 @@
 import Sperson from "./Sperson"
+import Heading from "./Heading"
 
 const Salesperson = ({data, update}) => {
     return (
         <>
+            <Heading value="List of all Salespersons" />
             {data.length ?
             (<table className="table-auto border-2">
             <thead>
@@ -25,7 +27,7 @@ const Salesperson = ({data, update}) => {
                 ))}
             </tbody>
             </table>):
-            (<h1>No Data to Display</h1>)
+            (<Heading value="No Data to Display"/>)
         }
         </>
     )
