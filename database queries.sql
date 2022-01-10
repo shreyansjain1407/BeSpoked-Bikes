@@ -1,5 +1,5 @@
-#Table creation
-#Products
+--#Table creation
+--#Products
 CREATE TABLE `profisee`.`products` (
   `product_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL UNIQUE,
@@ -10,7 +10,7 @@ CREATE TABLE `profisee`.`products` (
   `commissioni` INT NOT NULL,
   PRIMARY KEY (`product_id`));
 
-#Salesperson
+--#Salesperson
 CREATE TABLE `profisee`.`salesperson` (
   `sp_id` INT NOT NULL,
   `f_name` VARCHAR(45) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE `profisee`.`salesperson` (
   `manager` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`sp_id`));
 
-#Customer
+--#Customer
 CREATE TABLE `profisee`.`customer` (
   `cust_id` INT NOT NULL,
   `f_name` VARCHAR(45) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE `profisee`.`customer` (
   `start_date` DATE NOT NULL DEFAULT (CURRENT_DATE),
   PRIMARY KEY (`cust_id`));
 
-#Discount
+--#Discount
 CREATE TABLE `profisee`.`discount` (
   `disc_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NOT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE `profisee`.`discount` (
     ON UPDATE NO ACTION);
 
 
-#Triggers Used:
-#Trigger to prevent sale of bikes with quantity 0
+--#Triggers Used:
+--#Trigger to prevent sale of bikes with quantity 0
 CREATE DEFINER = CURRENT_USER TRIGGER `profisee`.`sales_insufficient_qty` BEFORE INSERT ON `sales` FOR EACH ROW
 BEGIN
 	DECLARE msg varchar(100);
@@ -61,7 +61,7 @@ BEGIN
 	end if;
 END
 
-#Trigger to prevent addition of bikes with quantity less than 0
+--#Trigger to prevent addition of bikes with quantity less than 0
 CREATE DEFINER = CURRENT_USER TRIGGER `profisee`.`products_checkQtyLessThanZero` BEFORE INSERT ON `products` FOR EACH ROW
 BEGIN
 	declare msg varchar(100);
@@ -82,7 +82,7 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `sales_checkCustSalespAtInsert` BEFORE
 	end if;
 END
 
-#Trigger to prevent addition of bikes with quantity less than 0
+--#Trigger to prevent addition of bikes with quantity less than 0
 CREATE DEFINER = CURRENT_USER TRIGGER `profisee`.`products_checkQtyLessThanZeroUpdate` BEFORE UPDATE ON `products` FOR EACH ROW
 BEGIN
 	declare msg varchar(100);
@@ -92,7 +92,7 @@ BEGIN
 	end if;
 END
 
-#Trigger on salesperson, termination date cannot be less than start date
+--#Trigger on salesperson, termination date cannot be less than start date
 CREATE DEFINER = CURRENT_USER TRIGGER `profisee`.`salesperson_terminationCheckAtInsert` BEFORE INSERT ON `salesperson` FOR EACH ROW
 BEGIN
 	declare msg varchar(100);
@@ -102,7 +102,7 @@ BEGIN
 	end if;
 END
 
-#Trigger on salesperson at update
+--#Trigger on salesperson at update
 CREATE DEFINER = CURRENT_USER TRIGGER `profisee`.`salesperson_terminationCheckAtUpdate` BEFORE UPDATE ON `salesperson` FOR EACH ROW
 BEGIN
 	declare msg varchar(100);
@@ -112,7 +112,7 @@ BEGIN
 	end if;
 END
 
-#Trigger for discount start and end date
+--#Trigger for discount start and end date
 CREATE DEFINER = CURRENT_USER TRIGGER `profisee`.`discount_startEndDateValidationAtInsert` BEFORE INSERT ON `discount` FOR EACH ROW
 BEGIN
 	declare msg varchar(100);
@@ -131,12 +131,12 @@ BEGIN
 	end if;
 END
 
-#View, utilized for the display of all the sales data 
+--#View, utilized for the display of all the sales data 
 SELECT Z.name as product_name, Z.disc_price as sale_price, Z.c_name as Customer_Name, Z.sale_date, concat(SP.f_name, " ", SP.l_name) as Salesperson, (Z.disc_price*Z.commission)/100 as Commission
 FROM (SELECT Y.name, Y.sale_price, Y.c_name, Y.sale_date, Y.sp_id, Y.commission,
 case
 when Y.sale_date between Y.begin_date and Y.end_date
-then (Y.sale_price*Y.discount/100)
+then (Y.sale_price*(100-Y.discount)/100)
 else Y.sale_price
 end as disc_price
 FROM (SELECT X.name, X.commission, X.sale_price , X.sp_id, concat(X.f_name, ' ', X.l_name) as c_name, X.sale_date, X.product_id, D.begin_date, D.end_date, D.discount FROM
@@ -152,7 +152,7 @@ FROM (SELECT Z.name as product_name, Z.disc_price as sale_price, Z.c_name as Cus
 FROM (SELECT Y.name, Y.sale_price, Y.c_name, Y.sale_date, Y.sp_id, Y.commission,
 case
 when Y.sale_date between Y.begin_date and Y.end_date
-then (Y.sale_price*Y.discount/100)
+then (Y.sale_price*(100-Y.discount)/100)
 else Y.sale_price
 end as disc_price
 FROM (SELECT X.name, X.commission, X.sale_price , X.sp_id, concat(X.f_name, ' ', X.l_name) as c_name, X.sale_date, X.product_id, D.begin_date, D.end_date, D.discount FROM

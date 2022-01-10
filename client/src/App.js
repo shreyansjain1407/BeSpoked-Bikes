@@ -47,16 +47,16 @@ function App() {
 
   //Function to update salesperson details checks for duplicates by checking phoen and first name
   const updateSP = async (salesPerson) => {
-    const duplicateSP = await Axios.post('http://localhost:3001/fetchSP',{
-      f_name: salesPerson.f_name,
-      phone: salesPerson.phone,
-    }).then((response) => {
-      return response.data;
-    })
-    if(duplicateSP.length > 0){
-      alert("The details entered are duplicate, salesperson cannot be modified")
-      return;
-    }
+    // const duplicateSP = await Axios.post('http://localhost:3001/fetchSP',{
+    //   f_name: salesPerson.f_name,
+    //   phone: salesPerson.phone,
+    // }).then((response) => {
+    //   return response.data;
+    // })
+    // if(duplicateSP.length > 0){
+    //   alert("The details entered are duplicate, salesperson cannot be modified")
+    //   return;
+    // }
 
     // console.log(salesPerson);
     Axios.post('http://localhost:3001/updSalesPerson',{
